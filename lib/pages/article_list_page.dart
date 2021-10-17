@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_article_gits/pages/search_pages.dart';
+import 'package:flutter_article_gits/utils/pallete_hex_color.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,6 +23,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
   final List<Articles> _listArticles = [];
   int _page = 1;
   bool _lastArticle = false;
+  int colorIndex = 0;
 
   Future<void> _requestData() async {
     if (_lastArticle) return;
@@ -107,9 +109,19 @@ class _ArticleListPageState extends State<ArticleListPage> {
             primary: false,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
+              if (index % 5 == 0) {
+                colorIndex = 0;
+              } else {
+                colorIndex++;
+              }
               return ArticleItem(
+                index: colorIndex,
                 title: _listArticles[index].title.rendered,
-                subtitle: _listArticles[index].links.wpAttachment[0].href,
+                subtitle: _listArticles[index].link,
+                color: PalleteHexColor().hexColor[colorIndex],
+                nextColor: colorIndex <= 3
+                    ? PalleteHexColor().hexColor[colorIndex + 1]
+                    : PalleteHexColor().hexColor[0],
               );
             },
             itemCount: _listArticles.length,

@@ -1,8 +1,7 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_article_gits/utils/pallete_hex_color.dart';
 import '../api/api_service.dart';
 import '../models/search.dart';
-import '../models/articles.dart';
 import '../widgets/article_item.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,6 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   int _page = 1;
   bool _lastArticle = false;
   String searchQuery = "";
+  int colorIndex = 0;
 
   Future<void> _requestData() async {
     if (_lastArticle) return;
@@ -72,9 +72,19 @@ class _SearchPageState extends State<SearchPage> {
             primary: false,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
+              if (index % 5 == 0) {
+                colorIndex = 0;
+              } else {
+                colorIndex++;
+              }
               return ArticleItem(
+                index: colorIndex,
                 title: _listArticles[index].title,
                 subtitle: _listArticles[index].url,
+                color: PalleteHexColor().hexColor[colorIndex],
+                nextColor: colorIndex <= 3
+                    ? PalleteHexColor().hexColor[colorIndex + 1]
+                    : PalleteHexColor().hexColor[0],
               );
             },
             itemCount: _listArticles.length,
@@ -95,6 +105,7 @@ class _SearchPageState extends State<SearchPage> {
       decoration: const InputDecoration(
         hintText: "Search article..",
         border: InputBorder.none,
+        labelStyle: TextStyle(color: Colors.white, fontSize: 16.0),
         hintStyle: TextStyle(color: Colors.white30, fontSize: 16.0),
       ),
       onChanged: (query) => _updateSearchQuery(query),
