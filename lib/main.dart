@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_article_gits/pages/search_pages.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/article_list_page.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         routes: {
           ArticleListPage.routeName: (context) => const ArticleListPage(),
           LoginPage.routeName: (context) => const LoginPage(),
+          SearchPage.routeName: (context) => const SearchPage(),
         },
       ),
     );

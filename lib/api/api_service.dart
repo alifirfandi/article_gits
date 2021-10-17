@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'package:flutter_article_gits/models/search.dart';
 import 'package:http/http.dart' as http;
 import '../models/articles.dart';
 import '../models/user.dart';
+import '../models/search.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://gits-msib.my.id/wp-json';
@@ -35,6 +39,29 @@ class ApiService {
       return User.fromJson(json.decode(response.body));
     } else {
       return null;
+    }
+  }
+
+  static Future<List<SearchArticles>> searchList(
+    http.Client client,
+    int page,
+    String searchQuery,
+  ) async {
+    http.Response? response;
+    log(" DATA $searchQuery Page $page");
+    if (searchQuery.isNotEmpty) {
+      log(" DATA QUERY $searchQuery Page $page");
+      response = await client.get(
+          Uri.parse(_baseUrl + "/wp/v2/search?search=$searchQuery&page=$page"));
+    } else {
+      log(" DATA QUERY NOT $searchQuery");
+      response =
+          await client.get(Uri.parse(_baseUrl + "/wp/v2/search?&page=$page"));
+    }
+    if (response.statusCode == 200) {
+      return searchArticlesFromJson(response.body);
+    } else {
+      return [];
     }
   }
 }

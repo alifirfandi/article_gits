@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_article_gits/pages/search_pages.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,7 +27,6 @@ class _ArticleListPageState extends State<ArticleListPage> {
     if (_lastArticle) return;
     List<Articles> articles =
         await ApiService.listArticle(http.Client(), _page);
-
     if (articles.isNotEmpty) {
       _page++;
       _listArticles.addAll(articles);
@@ -89,6 +89,13 @@ class _ArticleListPageState extends State<ArticleListPage> {
               }
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.search),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.of(context).pushNamed(SearchPage.routeName);
+            },
+          )
         ],
       ),
       body: ListView(
